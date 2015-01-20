@@ -29,6 +29,7 @@ public class DBUpdater extends FlowBuilder {
 		
         fromF("vertx:splitsecnd.dbUpdater")
         .log("Inserting ATP Response record.")
+        .log("DeviceId2: ${header.deviceId}")
         .log(LoggingLevel.DEBUG, DBUpdater.class.getName(), "[DBUpdater]: ${body}")
         .onException(Exception.class).handled(true).log(LoggingLevel.ERROR, DBUpdater.class.getName(), "Error").end()
         .process(new UpdateDBProcessor()).end();
