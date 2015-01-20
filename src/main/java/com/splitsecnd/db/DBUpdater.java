@@ -25,7 +25,7 @@ public class DBUpdater extends FlowBuilder {
 	
 	@Override
 	public void configure() throws Exception {
-		setupDataSource();
+		splitsecndDatasource = setupDataSource();
 		
         fromF("vertx:splitsecnd.dbUpdater")
         .log("Inserting ATP Response record.")
