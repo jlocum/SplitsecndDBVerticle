@@ -59,9 +59,9 @@ public class DBUpdater extends FlowBuilder {
 			
 			PreparedStatement ps = conn.prepareStatement(INSERT_EVENT);
 			ps.setString(1, device);
-			ps.setString(2, result.getEvent().getAtpEventId());
-			ps.setString(3, result.getEvent().getAtpCreationTimestamp());
-			ps.setString(4, result.getEvent().getAtpLastUpdateTimestamp());
+			ps.setString(2, result.getEventCorrelation().getAtpEventId());
+			ps.setString(3, result.getEventCorrelation().getAtpCreationTimestamp());
+			ps.setString(4, result.getEventCorrelation().getAtpLastUpdateTimestamp());
 			
 			ps.execute();
 		}
@@ -93,14 +93,14 @@ public class DBUpdater extends FlowBuilder {
 			}
 		}
 
-		private EventCorrelation event;
+		private EventCorrelation EventCorrelation;
 
-		public EventCorrelation getEvent() {
-			return event;
+		public EventCorrelation getEventCorrelation() {
+			return EventCorrelation;
 		}
 
-		public void setEvent(EventCorrelation event) {
-			this.event = event;
+		public void setEventCorrelation(EventCorrelation EventCorrelation) {
+			this.EventCorrelation = EventCorrelation;
 		}
 	}
 }
