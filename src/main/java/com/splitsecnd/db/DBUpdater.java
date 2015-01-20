@@ -39,13 +39,13 @@ public class DBUpdater extends FlowBuilder {
 		JsonObject config = getConfigObject("splitsecnd-db");
 		
 		BasicDataSource ds = new BasicDataSource();
-		ds.setDriverClassName(config.getString("jdbc.driver"));
-		ds.setUsername(config.getString("jdbc.username"));
-		ds.setPassword(config.getString("jdbc.password"));
-		ds.setInitialSize(config.getInteger("jdbc.initialSize",2));
-		ds.setMaxActive(config.getInteger("jdbc.maxActive",2));
-		ds.setMaxIdle(config.getInteger("jdbc.maxIdle",2));
-		ds.setUrl(config.getString("jdbc.url"));
+		ds.setDriverClassName(config.getString("driver"));
+		ds.setUsername(config.getString("username"));
+		ds.setPassword(config.getString("password"));
+		ds.setInitialSize(config.getInteger("initialSize",2));
+		ds.setMaxActive(config.getInteger("maxActive",2));
+		ds.setMaxIdle(config.getInteger("maxIdle",2));
+		ds.setUrl(config.getString("url"));
 		
 		return ds;
 	}
