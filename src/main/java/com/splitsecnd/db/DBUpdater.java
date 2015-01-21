@@ -19,8 +19,8 @@ public class DBUpdater extends FlowBuilder {
 	DataSource splitsecndDatasource;
 	
 	private static final String INSERT_EVENT = "insert into ATPEvent " +
-				"(device_id, created, atp_event_id, atp_creation_timestamp, atp_last_update_timestamp)" +
-				" values (?,now(),?,?,?)";
+				"(device_id, created, atp_event_id, atp_creation_timestamp, atp_last_update_timestamp, atp_event)" +
+				" values (?,now(),?,?,?,?)";
 	
 	
 	@Override
@@ -29,7 +29,6 @@ public class DBUpdater extends FlowBuilder {
 		
         fromF("vertx:splitsecnd.dbUpdater")
         .log("Inserting ATP Response record.")
-        .log("DeviceId2: ${header.deviceId}")
         .log(LoggingLevel.DEBUG, DBUpdater.class.getName(), "[DBUpdater]: ${body}")
         .onException(Exception.class).handled(true).log(LoggingLevel.ERROR, DBUpdater.class.getName(), "Error").end()
         .process(new UpdateDBProcessor()).end();
@@ -56,6 +55,7 @@ public class DBUpdater extends FlowBuilder {
 		public void process(Exchange exchange) throws Exception {
 			ATPResponse result = new Gson().fromJson(exchange.getIn().getBody(String.class), ATPResponse.class);
 			String device = exchange.getIn().getHeader("deviceId");
+			String eventSent = exchange.getIn().getHeader("eventJson");
 			Connection conn = splitsecndDatasource.getConnection();
 			
 			PreparedStatement ps = conn.prepareStatement(INSERT_EVENT);
@@ -63,6 +63,7 @@ public class DBUpdater extends FlowBuilder {
 			ps.setString(2, result.getEventCorrelation().getAtpEventId());
 			ps.setString(3, result.getEventCorrelation().getAtpCreationTimestamp());
 			ps.setString(4, result.getEventCorrelation().getAtpLastUpdateTimestamp());
+			ps.setString(5, eventSent);
 			
 			ps.execute();
 			
