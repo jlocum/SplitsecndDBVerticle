@@ -65,6 +65,9 @@ public class DBUpdater extends FlowBuilder {
 			ps.setString(4, result.getEventCorrelation().getAtpLastUpdateTimestamp());
 			
 			ps.execute();
+			
+			ps.close();
+			conn.close();
 		}
 		
 	}
