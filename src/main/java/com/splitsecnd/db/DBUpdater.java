@@ -54,8 +54,8 @@ public class DBUpdater extends FlowBuilder {
 		@Override
 		public void process(Exchange exchange) throws Exception {
 			ATPResponse result = new Gson().fromJson(exchange.getIn().getBody(String.class), ATPResponse.class);
-			String device = exchange.getIn().getHeader("deviceId");
-			String eventSent = exchange.getIn().getHeader("eventJson");
+			String device = exchange.getIn().getHeader("ein");
+			String eventSent = (String) exchange.getProperty("eventJson");
 			Connection conn = splitsecndDatasource.getConnection();
 			
 			PreparedStatement ps = conn.prepareStatement(INSERT_EVENT);
