@@ -18,9 +18,9 @@ public class DBUpdater extends FlowBuilder {
 
 	DataSource splitsecndDatasource;
 	
-	private static final String INSERT_EVENT = "insert into ATPEvent " +
-				"(device_id, created, atp_event_id, atp_creation_timestamp, atp_last_update_timestamp, atp_event)" +
-				" values (?,now(),?,?,?,?)";
+	private static final String INSERT_EVENT = "insert into EmergencyEvent " +
+				"(device_id, created, event_sent, event_response)" +
+				" values (?,now(),?,?)";
 	
 	
 	@Override
@@ -28,7 +28,7 @@ public class DBUpdater extends FlowBuilder {
 		splitsecndDatasource = setupDataSource();
 		
         fromF("vertx:splitsecnd.dbUpdater")
-        .log("Inserting ATP Response record.")
+        .log("Inserting Event Response record.")
         .log(LoggingLevel.DEBUG, DBUpdater.class.getName(), "[DBUpdater]: ${body}")
         .onException(Exception.class).handled(true).log(LoggingLevel.ERROR, DBUpdater.class.getName(), "Error").end()
         .process(new UpdateDBProcessor()).end();
@@ -53,17 +53,15 @@ public class DBUpdater extends FlowBuilder {
 		
 		@Override
 		public void process(Exchange exchange) throws Exception {
-			ATPResponse result = new Gson().fromJson(exchange.getIn().getBody(String.class), ATPResponse.class);
+			String eventResponse = exchange.getIn().getBody(String.class);
 			String device = exchange.getIn().getHeader("ein");
 			String eventSent = (String) exchange.getProperty("eventJson");
 			Connection conn = splitsecndDatasource.getConnection();
 			
 			PreparedStatement ps = conn.prepareStatement(INSERT_EVENT);
 			ps.setString(1, device);
-			ps.setString(2, result.getEventCorrelation().getAtpEventId());
-			ps.setString(3, result.getEventCorrelation().getAtpCreationTimestamp());
-			ps.setString(4, result.getEventCorrelation().getAtpLastUpdateTimestamp());
-			ps.setString(5, eventSent);
+			ps.setString(2, eventSent);
+			ps.setString(3, eventResponse);
 			
 			ps.execute();
 			
@@ -71,41 +69,5 @@ public class DBUpdater extends FlowBuilder {
 			conn.close();
 		}
 		
-	}
-	
-	protected class ATPResponse {
-		protected class EventCorrelation {
-			private String AtpEventId;
-			private String AtpCreationTimestamp;
-			private String AtpLastUpdateTimestamp;
-			public String getAtpEventId() {
-				return AtpEventId;
-			}
-			public void setAtpEventId(String atpEventId) {
-				AtpEventId = atpEventId;
-			}
-			public String getAtpCreationTimestamp() {
-				return AtpCreationTimestamp;
-			}
-			public void setAtpCreationTimestamp(String atpCreationTimestamp) {
-				AtpCreationTimestamp = atpCreationTimestamp;
-			}
-			public String getAtpLastUpdateTimestamp() {
-				return AtpLastUpdateTimestamp;
-			}
-			public void setAtpLastUpdateTimestamp(String atpLastUpdateTimestamp) {
-				AtpLastUpdateTimestamp = atpLastUpdateTimestamp;
-			}
-		}
-
-		private EventCorrelation EventCorrelation;
-
-		public EventCorrelation getEventCorrelation() {
-			return EventCorrelation;
-		}
-
-		public void setEventCorrelation(EventCorrelation EventCorrelation) {
-			this.EventCorrelation = EventCorrelation;
-		}
-	}
+	}	
 }
