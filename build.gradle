@@ -53,7 +53,7 @@ repositories {
         password sonatypePassword
       }
       url 'https://nexus.cyberphysicalsystems.io/content/groups/public/' }
-	maven { url 'https://repository.apache.org/content/groups/snapshots' }
+	maven { url 'https://repository.apache.org/content/groups/snapshots/' }
     mavenLocal()
 }
 dependencies {
