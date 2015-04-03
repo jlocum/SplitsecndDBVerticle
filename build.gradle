@@ -52,7 +52,7 @@ repositories {
         username sonatypeUsername
         password sonatypePassword
       }
-      url 'http://nexus.cyberphysicalsystems.io/' }
+      url 'https://nexus.cyberphysicalsystems.io/content/groups/public/' }
     mavenLocal()
 }
 dependencies {
