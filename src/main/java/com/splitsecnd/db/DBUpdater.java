@@ -61,7 +61,7 @@ public class DBUpdater extends FlowBuilder {
 			PreparedStatement ps = conn.prepareStatement(INSERT_EVENT);
 			ps.setString(1, device);
 			ps.setString(2, eventSent);
-			ps.setString(3, eventResponseExchange.getOut().getBody(String.class));
+			ps.setString(3, eventResponseExchange.getIn().getBody(String.class));
 			
 			ps.execute();
 			
