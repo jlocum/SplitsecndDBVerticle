@@ -53,7 +53,7 @@ public class DBUpdater extends FlowBuilder {
 		
 		@Override
 		public void process(Exchange exchange) throws Exception {
-			Exchange eventResponseExchange = exchange.getIn().getBody(Exchange.class);
+			String eventResponse = exchange.getIn().getBody(String.class);
 			String device = exchange.getIn().getHeader("ein");
 			String eventSent = (String) exchange.getProperty("eventJson");
 			Connection conn = splitsecndDatasource.getConnection();
@@ -61,7 +61,7 @@ public class DBUpdater extends FlowBuilder {
 			PreparedStatement ps = conn.prepareStatement(INSERT_EVENT);
 			ps.setString(1, device);
 			ps.setString(2, eventSent);
-			ps.setString(3, eventResponseExchange.getIn().getBody(String.class));
+			ps.setString(3, eventResponse);
 			
 			ps.execute();
 			
