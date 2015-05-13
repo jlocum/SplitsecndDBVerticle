@@ -46,6 +46,10 @@ public class DBUpdater extends FlowBuilder {
 		ds.setMaxActive(config.getInteger("maxActive",2));
 		ds.setMaxIdle(config.getInteger("maxIdle",2));
 		ds.setUrl(config.getString("url"));
+		ds.setRemoveAbandoned(true);
+		ds.setLogAbandoned(true);
+		ds.setTestOnBorrow(true);
+		ds.setValidationQuery("select 1");
 		
 		return ds;
 	}
